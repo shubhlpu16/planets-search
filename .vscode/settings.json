@@ -1,0 +1,33 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "prettier.semi": false,
+    "prettier.singleQuote": true,
+    "prettier.configPath": ".prettierrc",
+    "prettier.requireConfig": true,
+    "prettier.resolveGlobalModules": true,
+    "prettier.trailingComma": "none",
+    "prettier.useTabs": true,
+    "prettier.eslintIntegration": true,
+    "prettier.cssEnable": [
+        "css",
+        "less",
+        "scss"
+    ],
+    "prettier.javascriptEnable": [
+        "javascript",
+        "javascriptreact"
+    ],
+    "prettier.jsonEnable": [
+        "json"
+    ],
+    "prettier.parser": "flow",
+    "prettier.alignObjectProperties": true,
+    "prettier.arrayExpand": true,
+    "prettier.breakBeforeElse": true,
+    "prettier.breakProperty": true,
+    "prettier.noSpaceEmptyFn": true,
+    "prettier.spaceBeforeFunctionParen": true
+}
