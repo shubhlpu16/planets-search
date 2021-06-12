@@ -1,6 +1,13 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import { Grid, Typography, FormControlLabel, Checkbox } from '@material-ui/core'
+import {
+  Grid,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+} from '@material-ui/core'
 // eslint-disable-next-line import/no-extraneous-dependencies
 
 const useStyles = makeStyles(() => ({
@@ -24,48 +31,43 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const FILTERS = {
-  Color: [
-    { label: 'Red', selected: false },
-    { label: 'Green', selected: false },
-    { label: 'Blue', selected: false },
-  ],
-  Shape: [
-    { label: 'Small', selected: false },
-    { label: 'Medium', selected: false },
-    { label: 'Large', selected: false },
-  ],
-  Size: [
-    { label: 'Round', selected: false },
-    { label: 'Oval', selected: false },
-  ],
-}
-
-const FilterBox = () => {
+const FilterBox = (props) => {
   const classes = useStyles()
+  const { filters = {}, handleFilterSelect = () => {} } = props
   return (
     <>
       <Grid item xs={12} sm={3} className={classes.filterContainer}>
-        {Object.keys(FILTERS).map((item) => (
+        {Object.keys(filters).map((item) => (
           <div item key={item} className={classes.filter}>
             <Typography className={classes.filterText}>{item}</Typography>
-            {FILTERS[item].map((filter) => (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={filter.selected}
-                    onChange={() => {}}
-                    name={filter.label}
-                    color="primary"
-                  />
-                }
-                label={filter.label}
-              />
-            ))}
+            <FormGroup>
+              {filters[item].map((filter) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={
+                        filter.selected === undefined ? false : filter.selected
+                      }
+                      onChange={() => {
+                        handleFilterSelect(item, filter.id)
+                      }}
+                      name={filter.name}
+                      color="primary"
+                    />
+                  }
+                  label={filter.name}
+                />
+              ))}
+            </FormGroup>
           </div>
         ))}
       </Grid>
     </>
   )
+}
+
+FilterBox.propTypes = {
+  filters: PropTypes.object.isRequired,
+  handleFilterSelect: PropTypes.func.isRequired,
 }
 export default FilterBox
