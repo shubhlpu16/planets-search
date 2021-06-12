@@ -24,7 +24,22 @@ export const fetchFilters = (store) => async (dispatch) => {
     ...c,
     selected: filters.Size[i]?.selected,
   }))
-  dispatch(addStore({ filters: { ...filters } }))
+  const colorObject = {}
+  colors.forEach((color) => {
+    colorObject[color.id] = color.name
+  })
+  const shapeObject = {}
+  shapes.forEach((shape) => {
+    shapeObject[shape.id] = shape.name
+  })
+
+  dispatch(
+    addStore({
+      filters: { ...filters },
+      colors: { ...colorObject },
+      shapes: { ...shapeObject },
+    }),
+  )
 }
 
 const getStatus = (filter, id) => {
@@ -42,6 +57,30 @@ export const updateFilter = (store, type, id) => async (dispatch) => {
     selected: getStatus(filter, id),
   }))
   dispatch(addStore({ filters: { ...filters, [type]: updatedFilter } }))
+}
+
+export const getSearchResults = (store, searchText) => async (dispatch) => {
+  let searchUrl = `http://localhost:3000/planets`
+  if (searchText) {
+    searchUrl = `${searchUrl}?q=${searchText}`
+  } else {
+    searchUrl = `${searchUrl}?`
+  }
+  const { filters } = { ...store.getState().appStore }
+  Object.keys(filters).forEach((key) => {
+    filters[key].forEach((filter) => {
+      if (filter.selected) {
+        if (searchUrl.includes(key.toLowerCase())) {
+          searchUrl = `${searchUrl},${filter.id}`
+        } else {
+          searchUrl = `${searchUrl}&${key.toLowerCase()}=${filter.id}`
+        }
+      }
+    })
+  })
+
+  const { data } = await axios.get(searchUrl)
+  dispatch(addStore({ searchResults: [...data] }))
 }
 
 export default addStore

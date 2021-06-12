@@ -1,12 +1,17 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, CssBaseline, Grid } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import SearchBox from '../../components/search-box'
 import FilterBox from '../../components/filters-box'
-import { fetchFilters, updateFilter } from '../../actions/filter'
+import SearchResults from '../../components/search-results'
+import {
+  fetchFilters,
+  updateFilter,
+  getSearchResults,
+} from '../../actions/filter'
 import { Context } from '../../AppContext'
 
 const useStyles = makeStyles(() => ({
@@ -15,7 +20,7 @@ const useStyles = makeStyles(() => ({
     height: '100vh',
     borderTop: 'none',
     borderBottom: 'none',
-    paddingTop: '24px',
+    paddingTop: '5vw',
     overflow: 'hidden',
   },
 
@@ -23,13 +28,38 @@ const useStyles = makeStyles(() => ({
     marginTop: '48px',
     height: 'calc(100% - 80px)',
   },
+
+  searchResults: {
+    overflow: 'auto',
+    padding: '5vw',
+    height: '100%',
+  },
+
+  planetContainer: {
+    padding: '1vw',
+  },
+
+  planetName: {
+    fontWeight: 'bold',
+    marginBottom: '12px',
+  },
+  planetDescription: {
+    color: '#888282',
+    fontWeight: '500',
+    marginBottom: '12px',
+  },
+  line: {
+    background: '#dce2ed',
+    borderLeft: 'none',
+    opacity: '0.3',
+  },
 }))
 
 const Home = (props) => {
   const { store } = useContext(Context)
   const classes = useStyles()
-  const { filters } = props
-  const [filterData, setFilter] = React.useState(filters)
+  const { filters, searchText, searchResults = [], colors, shapes } = props
+  const [text, setText] = useState(searchText)
 
   useEffect(() => {
     ;(async () => {
@@ -37,25 +67,35 @@ const Home = (props) => {
     })()
   }, [])
 
-  useEffect(() => {
-    setFilter(filters)
-  }, [store])
   // console.log(filters, store.getState().filterStore.filters)
+  const handleSearchChange = (value) => {
+    setText(value)
+  }
+
+  const handleSearch = async () => {
+    await props.getSearchResults(store, text)
+  }
   const handleFilterSelect = async (type, id) => {
-    console.log(type, id)
     await props.updateFilter(store, type, id)
   }
   return (
     <>
-      <CssBaseline />
       <Container maxWidth="md" disableGutters className={classes.container}>
-        <SearchBox />
+        <SearchBox
+          searchText={text}
+          handleSearchChange={handleSearchChange}
+          handleSearch={handleSearch}
+        />
         <Grid className={classes.content} container>
           <FilterBox
             filters={filters || {}}
             handleFilterSelect={handleFilterSelect}
           />
-          <Grid item xs={12} sm={9} />
+          <SearchResults
+            searchResults={searchResults}
+            colors={colors}
+            shapes={shapes}
+          />
         </Grid>
       </Container>
     </>
@@ -66,10 +106,19 @@ Home.propTypes = {
   fetchFilters: PropTypes.func.isRequired,
   filters: PropTypes.object.isRequired,
   updateFilter: PropTypes.func.isRequired,
+  searchText: PropTypes.string.isRequired,
+  getSearchResults: PropTypes.func.isRequired,
+  searchResults: PropTypes.array.isRequired,
+  colors: PropTypes.object.isRequired,
+  shapes: PropTypes.object.isRequired,
 }
 export default connect(
   (store) => ({
     filters: store.appStore.filters,
+    searchText: store.appStore.searchText,
+    searchResults: store.appStore.searchResults,
+    colors: store.appStore.colors,
+    shapes: store.appStore.shapes,
   }),
-  { fetchFilters, updateFilter },
+  { fetchFilters, updateFilter, getSearchResults },
 )(Home)

@@ -26,3 +26,11 @@ code {
     'Courier New',
     monospace;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.MuiOutlinedInput-root {
+  border-radius: 0;
+}

@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     borderRight: '1px solid #dce2ed',
+    height: '100%',
   },
 
   filter: {
@@ -38,11 +39,12 @@ const FilterBox = (props) => {
     <>
       <Grid item xs={12} sm={3} className={classes.filterContainer}>
         {Object.keys(filters).map((item) => (
-          <div item key={item} className={classes.filter}>
+          <div key={item} className={classes.filter}>
             <Typography className={classes.filterText}>{item}</Typography>
             <FormGroup>
               {filters[item].map((filter) => (
                 <FormControlLabel
+                  key={filter.id}
                   control={
                     <Checkbox
                       checked={
@@ -52,7 +54,9 @@ const FilterBox = (props) => {
                         handleFilterSelect(item, filter.id)
                       }}
                       name={filter.name}
-                      color="primary"
+                      style={{
+                        color: item === 'Color' ? filter.name : '#438de3',
+                      }}
                     />
                   }
                   label={filter.name}

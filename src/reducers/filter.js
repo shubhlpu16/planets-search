@@ -7,6 +7,10 @@ export const DEFAULT_STORE = {
     Size: [],
     Shape: [],
   },
+  colors: {},
+  shapes: {},
+  searchText: '',
+  searchResult: [],
 }
 
 export const ACTION_TYPES = {
