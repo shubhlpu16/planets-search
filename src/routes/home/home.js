@@ -77,7 +77,7 @@ const Home = (props) => {
           filtered || filters[key].some((filter) => filter.selected === true)
       })
       if (filtered || searchResults) {
-        resultRef.current.show()
+        if (searchText) resultRef.current.show()
       }
     })()
   }, [])
