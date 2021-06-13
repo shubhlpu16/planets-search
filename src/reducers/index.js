@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import storeAdd from './reducer1'
+import storeAdd from './filter'
 
 export default combineReducers({
-  storeAdd,
+  appStore: storeAdd,
 })
