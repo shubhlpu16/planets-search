@@ -68,6 +68,7 @@ const SearchBox = (props) => {
           className={classes.searchField}
           value={searchText}
           onChange={handleChange}
+          autoFocus
           classes={{ root: classes.root }}
         />
         <StyledButton

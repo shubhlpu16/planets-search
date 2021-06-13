@@ -93,6 +93,20 @@ const Home = (props) => {
     await props.getSearchResults(store, text)
     resultRef.current.show()
   }
+
+  const handleKeydown = async (e) => {
+    if (e.keyCode === 13) {
+      await handleSearch()
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeydown, false)
+    return () => {
+      document.removeEventListener('keydown', handleKeydown, false)
+    }
+  }, [])
+
   const handleFilterSelect = async (type, id) => {
     await props.updateFilter(store, type, id)
     await handleSearch()
