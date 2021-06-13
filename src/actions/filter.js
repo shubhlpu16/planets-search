@@ -71,6 +71,7 @@ export const getSearchResults = (store, searchText) => async (dispatch) => {
     searchUrl = `${searchUrl}?q=${searchText}`
   } else {
     searchUrl = `${searchUrl}?`
+    // dispatch(addStore({ searchResults: [...[]], searchText }))
   }
   const { filters } = { ...store.getState().appStore }
   Object.keys(filters).forEach((key) => {
@@ -87,6 +88,10 @@ export const getSearchResults = (store, searchText) => async (dispatch) => {
 
   const { data } = await axios.get(searchUrl)
   dispatch(addStore({ searchResults: [...data] }))
+}
+
+export const handleSearchChange = (value) => (dispatch) => {
+  dispatch(addStore({ searchText: value }))
 }
 
 export default addStore

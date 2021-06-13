@@ -12,6 +12,7 @@ import {
   fetchFilters,
   updateFilter,
   getSearchResults,
+  handleSearchChange as handleChange,
 } from '../../actions/filter'
 import { Context } from '../../AppContext'
 
@@ -84,6 +85,7 @@ const Home = (props) => {
 
   const handleSearchChange = (value) => {
     setText(value)
+    props.handleChange(value)
   }
 
   const handleSearch = async () => {
@@ -145,6 +147,7 @@ Home.propTypes = {
   searchResults: PropTypes.array.isRequired,
   colors: PropTypes.object.isRequired,
   shapes: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
 }
 export default connect(
   (store) => ({
@@ -154,5 +157,5 @@ export default connect(
     colors: store.appStore.colors,
     shapes: store.appStore.shapes,
   }),
-  { fetchFilters, updateFilter, getSearchResults },
+  { fetchFilters, updateFilter, getSearchResults, handleChange },
 )(Home)
