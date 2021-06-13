@@ -10,6 +10,6 @@ store.subscribe(() => {
   saveState({
     appStore: store.getState().appStore,
   })
-}, console.log(store.getState().appStore)) //eslint-disable-line
+})
 
 export default store

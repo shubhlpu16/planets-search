@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -7,6 +7,7 @@ import { Container, Grid } from '@material-ui/core'
 import SearchBox from '../../components/search-box'
 import FilterBox from '../../components/filters-box'
 import SearchResults from '../../components/search-results'
+import Loader from '../../components/loader'
 import {
   fetchFilters,
   updateFilter,
@@ -21,7 +22,7 @@ const useStyles = makeStyles(() => ({
     borderTop: 'none',
     borderBottom: 'none',
     paddingTop: '5vw',
-    overflow: 'hidden',
+    overflow: 'auto',
   },
 
   content: {
@@ -60,24 +61,43 @@ const Home = (props) => {
   const classes = useStyles()
   const { filters, searchText, searchResults = [], colors, shapes } = props
   const [text, setText] = useState(searchText)
+  const loaderRef = useRef()
+  const filterRef = useRef()
+  const resultRef = useRef()
 
   useEffect(() => {
     ;(async () => {
+      loaderRef.current.show()
       await props.fetchFilters(store)
+      loaderRef.current.hide()
+      filterRef.current.show()
     })()
   }, [])
 
-  // console.log(filters, store.getState().filterStore.filters)
+  useEffect(() => {
+    let filtered = false
+    Object.keys(filters).forEach((key) => {
+      filtered =
+        filtered || filters[key].some((filter) => filter.selected === true)
+    })
+    if (filtered) {
+      resultRef.current.show()
+    }
+  }, [])
+
   const handleSearchChange = (value) => {
     setText(value)
   }
 
   const handleSearch = async () => {
     await props.getSearchResults(store, text)
+    resultRef.current.show()
   }
   const handleFilterSelect = async (type, id) => {
     await props.updateFilter(store, type, id)
+    await handleSearch()
   }
+
   return (
     <>
       <Container maxWidth="md" disableGutters className={classes.container}>
@@ -90,14 +110,17 @@ const Home = (props) => {
           <FilterBox
             filters={filters || {}}
             handleFilterSelect={handleFilterSelect}
+            ref={filterRef}
           />
           <SearchResults
             searchResults={searchResults}
             colors={colors}
             shapes={shapes}
+            ref={resultRef}
           />
         </Grid>
       </Container>
+      <Loader ref={loaderRef} />
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -18,6 +18,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     borderRight: '1px solid #dce2ed',
     height: '100%',
+    opacity: '0',
   },
 
   filter: {
@@ -32,12 +33,30 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const FilterBox = (props) => {
+const FilterBox = forwardRef(function FilterBox(props, ref) {
   const classes = useStyles()
   const { filters = {}, handleFilterSelect = () => {} } = props
+  const filterRef = useRef()
+
+  useImperativeHandle(ref, () => ({
+    show: () => {
+      if (filterRef.current)
+        filterRef.current.animate(
+          { opacity: [1] },
+          { duration: 500, easing: 'ease-in', fill: 'forwards' },
+        )
+    },
+  }))
+
   return (
     <>
-      <Grid item xs={12} sm={3} className={classes.filterContainer}>
+      <Grid
+        item
+        xs={12}
+        sm={3}
+        className={classes.filterContainer}
+        ref={filterRef}
+      >
         {Object.keys(filters).map((item) => (
           <div key={item} className={classes.filter}>
             <Typography className={classes.filterText}>{item}</Typography>
@@ -68,7 +87,7 @@ const FilterBox = (props) => {
       </Grid>
     </>
   )
-}
+})
 
 FilterBox.propTypes = {
   filters: PropTypes.object.isRequired,
