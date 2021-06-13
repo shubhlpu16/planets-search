@@ -65,15 +65,21 @@ export const updateFilter = (store, type, id) => async (dispatch) => {
   dispatch(addStore({ filters: { ...filters, [type]: updatedFilter } }))
 }
 
-export const getSearchResults = (store, searchText) => async (dispatch) => {
+export const getSearchResults = (store) => async (dispatch) => {
+  const { filters, searchText } = { ...store.getState().appStore }
+
   let searchUrl = `https://planet-server-api.herokuapp.com/planets`
   if (searchText) {
     searchUrl = `${searchUrl}?q=${searchText}`
   } else {
+    // Uncertain whether search will happen with or without entering
+    // the text in search field for now I have enabled search when no text is entered
+    // I have tried contacting the team
+
     searchUrl = `${searchUrl}?`
-    // dispatch(addStore({ searchResults: [...[]], searchText }))
+    // dispatch(addStore({ searchResults: [] }))
+    // return
   }
-  const { filters } = { ...store.getState().appStore }
   Object.keys(filters).forEach((key) => {
     filters[key].forEach((filter) => {
       if (filter.selected) {

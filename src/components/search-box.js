@@ -70,6 +70,7 @@ const SearchBox = (props) => {
           onChange={handleChange}
           autoFocus
           classes={{ root: classes.root }}
+          helperText="Please enter text to search"
         />
         <StyledButton
           variant="contained"

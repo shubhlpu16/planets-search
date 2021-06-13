@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -61,7 +61,6 @@ const Home = (props) => {
   const { store } = useContext(Context)
   const classes = useStyles()
   const { filters, searchText, searchResults = [], colors, shapes } = props
-  const [text, setText] = useState(searchText)
   const loaderRef = useRef()
   const filterRef = useRef()
   const resultRef = useRef()
@@ -84,12 +83,11 @@ const Home = (props) => {
   }, [])
 
   const handleSearchChange = (value) => {
-    setText(value)
     props.handleChange(value)
   }
 
   const handleSearch = async () => {
-    await props.getSearchResults(store, text)
+    await props.getSearchResults(store)
     resultRef.current.show()
   }
 
@@ -115,7 +113,7 @@ const Home = (props) => {
     <>
       <Container maxWidth="md" disableGutters className={classes.container}>
         <SearchBox
-          searchText={text}
+          searchText={searchText}
           handleSearchChange={handleSearchChange}
           handleSearch={handleSearch}
         />
