@@ -30,7 +30,3 @@ code {
 ::-webkit-scrollbar {
   display: none;
 }
-
-.MuiOutlinedInput-root {
-  border-radius: 0;
-}
