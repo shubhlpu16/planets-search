@@ -71,18 +71,15 @@ const Home = (props) => {
       await props.fetchFilters(store)
       loaderRef.current.hide()
       filterRef.current.show()
+      let filtered = false
+      Object.keys(filters).forEach((key) => {
+        filtered =
+          filtered || filters[key].some((filter) => filter.selected === true)
+      })
+      if (filtered || searchResults) {
+        resultRef.current.show()
+      }
     })()
-  }, [])
-
-  useEffect(() => {
-    let filtered = false
-    Object.keys(filters).forEach((key) => {
-      filtered =
-        filtered || filters[key].some((filter) => filter.selected === true)
-    })
-    if (filtered) {
-      resultRef.current.show()
-    }
   }, [])
 
   const handleSearchChange = (value) => {
