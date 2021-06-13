@@ -66,7 +66,7 @@ export const updateFilter = (store, type, id) => async (dispatch) => {
 }
 
 export const getSearchResults = (store, searchText) => async (dispatch) => {
-  let searchUrl = `https://planet-server-api.herokuapp.com/coplanets`
+  let searchUrl = `https://planet-server-api.herokuapp.com/planets`
   if (searchText) {
     searchUrl = `${searchUrl}?q=${searchText}`
   } else {
