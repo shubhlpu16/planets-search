@@ -1,11 +1,11 @@
-
+### LIVE LINK : [https://planet-search.herokuapp.com/]
+### API ENDPOINT: [https://planet-server-api.herokuapp.com]
 
 ## Available Scripts
 
 Clone the project 
 run ```npm install``` || ```yarn install```
 
-For Now mock api server support on port 3000
 
 ### NOTE
 
