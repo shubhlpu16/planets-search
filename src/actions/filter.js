@@ -8,9 +8,15 @@ const addStore = (data) => (dispatch) => {
   })
 }
 export const fetchFilters = (store) => async (dispatch) => {
-  const { data: colors } = await axios.get('http://localhost:3000/colors')
-  const { data: shapes } = await axios.get('http://localhost:3000/shapes')
-  const { data: sizes } = await axios.get('http://localhost:3000/sizes')
+  const { data: colors } = await axios.get(
+    'https://planet-server-api.herokuapp.com/colors',
+  )
+  const { data: shapes } = await axios.get(
+    'https://planet-server-api.herokuapp.com/shapes',
+  )
+  const { data: sizes } = await axios.get(
+    'https://planet-server-api.herokuapp.com/sizes',
+  )
   const { filters } = { ...store.getState().appStore }
   filters.Color = colors.map((c, i) => ({
     ...c,
@@ -60,7 +66,7 @@ export const updateFilter = (store, type, id) => async (dispatch) => {
 }
 
 export const getSearchResults = (store, searchText) => async (dispatch) => {
-  let searchUrl = `http://localhost:3000/planets`
+  let searchUrl = `https://planet-server-api.herokuapp.com/coplanets`
   if (searchText) {
     searchUrl = `${searchUrl}?q=${searchText}`
   } else {
