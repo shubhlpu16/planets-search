@@ -9,13 +9,13 @@ const addStore = (data) => (dispatch) => {
 }
 export const fetchFilters = (store) => async (dispatch) => {
   const { data: colors } = await axios.get(
-    'https://planet-server-api.herokuapp.com/colors',
+    'https://planets-server.cyclic.app/colors',
   )
   const { data: shapes } = await axios.get(
-    'https://planet-server-api.herokuapp.com/shapes',
+    'https://planets-server.cyclic.app/shapes',
   )
   const { data: sizes } = await axios.get(
-    'https://planet-server-api.herokuapp.com/sizes',
+    'https://planets-server.cyclic.app/sizes',
   )
   const { filters } = { ...store.getState().appStore }
   filters.Color = colors.map((c, i) => ({
@@ -68,7 +68,7 @@ export const updateFilter = (store, type, id) => async (dispatch) => {
 export const getSearchResults = (store) => async (dispatch) => {
   const { filters, searchText } = { ...store.getState().appStore }
 
-  let searchUrl = `https://planet-server-api.herokuapp.com/planets`
+  let searchUrl = `https://planets-server.cyclic.app/planets`
   if (searchText) {
     searchUrl = `${searchUrl}?q=${searchText}`
   } else {
